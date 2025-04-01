@@ -130,4 +130,3 @@ export function SimulationForm() {
     </div>
   )
 }
-
