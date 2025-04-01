@@ -60,7 +60,7 @@ export function CameraInventoryTable() {
     },
   ]
 
-  const getStatusColor = (status) => {
+  const getStatusColor = (status: string) => {
     switch (status) {
       case "Operational":
         return "bg-green-100 text-green-800"
