@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Switch } from "@/components/ui/switch"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select } from "@/components/ui/select"
 
 export function SimulationForm() {
   const [urbanCoverage, setUrbanCoverage] = useState(100)
@@ -14,6 +14,35 @@ export function SimulationForm() {
   const [includeStorefront, setIncludeStorefront] = useState(true)
   const [include3D, setInclude3D] = useState(true)
   const [includeBirdseye, setIncludeBirdseye] = useState(false)
+  const [updateFrequency, setUpdateFrequency] = useState("standard")
+  const [isRunning, setIsRunning] = useState(false)
+  const [isComplete, setIsComplete] = useState(false)
+
+  // Simulate toast functionality
+  const runSimulation = () => {
+    setIsRunning(true)
+    setIsComplete(false)
+
+    // Simulate a delay for the simulation to run
+    setTimeout(() => {
+      setIsRunning(false)
+      setIsComplete(true)
+
+      // Dispatch a custom event to update the simulation results
+      const event = new CustomEvent("simulationComplete", {
+        detail: {
+          urbanCoverage,
+          suburbanCoverage,
+          ruralCoverage,
+          includeStorefront,
+          include3D,
+          includeBirdseye,
+          updateFrequency,
+        },
+      })
+      window.dispatchEvent(event)
+    }, 2000)
+  }
 
   return (
     <div className="space-y-4">
@@ -78,19 +107,26 @@ export function SimulationForm() {
 
       <div className="space-y-2 pt-2">
         <Label htmlFor="update-frequency">Update Frequency</Label>
-        <Select defaultValue="standard">
-          <SelectTrigger id="update-frequency">
-            <SelectValue placeholder="Select frequency" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="standard">Standard (As specified)</SelectItem>
-            <SelectItem value="accelerated">Accelerated (50% faster)</SelectItem>
-            <SelectItem value="reduced">Reduced (50% slower)</SelectItem>
-          </SelectContent>
+        <Select value={updateFrequency} onChange={(e) => setUpdateFrequency(e.target.value)}>
+          <option value="standard">Standard (As specified)</option>
+          <option value="accelerated">Accelerated (50% faster)</option>
+          <option value="reduced">Reduced (50% slower)</option>
         </Select>
       </div>
 
-      <Button className="w-full mt-4">Run Simulation</Button>
+      <Button className="w-full mt-4" onClick={runSimulation} disabled={isRunning}>
+        {isRunning ? "Running Simulation..." : isComplete ? "Run Simulation Again" : "Run Simulation"}
+      </Button>
+
+      {isRunning && (
+        <div className="mt-2 text-center text-sm text-muted-foreground">Processing simulation... Please wait.</div>
+      )}
+
+      {isComplete && (
+        <div className="mt-2 text-center text-sm text-green-600">
+          Simulation complete! View results in the panel to the right.
+        </div>
+      )}
     </div>
   )
 }
