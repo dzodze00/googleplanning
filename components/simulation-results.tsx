@@ -1,9 +1,8 @@
 "use client"
 import { useEffect, useState } from "react"
-import type React from "react"
-
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { InteractiveChart } from "@/components/interactive-chart"
 
 // Define types for our data
 type CameraData = {
@@ -16,42 +15,6 @@ type CoverageData = {
   name: string
   current: number
   simulated: number
-}
-
-// Add proper type annotation to the BarChart component
-function BarChart<T extends Record<string, string | number>>({
-  children,
-  data,
-}: {
-  children?: React.ReactNode
-  data: T[]
-}) {
-  return (
-    <div className="flex h-full w-full flex-col">
-      <div className="flex-1 rounded-md border bg-gray-50 p-4">
-        <div className="mb-4 grid grid-cols-4 gap-2 border-b pb-2">
-          {data[0] &&
-            Object.keys(data[0]).map((key) => (
-              <div key={key} className="text-xs font-medium">
-                {key}
-              </div>
-            ))}
-        </div>
-        <div className="space-y-2">
-          {data.map((item, index) => (
-            <div key={index} className="grid grid-cols-4 gap-2">
-              {Object.entries(item).map(([key, value], i) => (
-                <div key={i} className="text-sm">
-                  {String(value)}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="mt-2 text-xs text-muted-foreground">Note: Interactive chart would be displayed here</div>
-    </div>
-  )
 }
 
 export function SimulationResults() {
@@ -74,6 +37,34 @@ export function SimulationResults() {
   const [summaryText, setSummaryText] = useState(
     "Based on your parameters, the optimal configuration requires 1,248 total cameras (850 Type A, 320 Type B, and 78 Type C) to achieve the desired coverage levels. This represents a 15% increase in efficiency compared to the current deployment.",
   )
+
+  // Convert camera data to chart format
+  const cameraChartData = cameraData.map((item) => ({
+    label: item.name,
+    value: item.count,
+    color: item.name === "Type A" ? "#4f46e5" : item.name === "Type B" ? "#06b6d4" : "#10b981",
+  }))
+
+  // Convert coverage data to chart format
+  const coverageChartData = coverageData.map((item) => ({
+    label: item.name,
+    value: item.simulated,
+    color: "#4f46e5",
+  }))
+
+  // Convert coverage comparison data to chart format
+  const coverageComparisonData = [
+    ...coverageData.map((item) => ({
+      label: `${item.name} (Current)`,
+      value: item.current,
+      color: "#94a3b8",
+    })),
+    ...coverageData.map((item) => ({
+      label: `${item.name} (Simulated)`,
+      value: item.simulated,
+      color: "#4f46e5",
+    })),
+  ]
 
   useEffect(() => {
     // Listen for the simulation complete event
@@ -138,7 +129,7 @@ export function SimulationResults() {
 
         <TabsContent value="cameras" className="pt-4">
           <div className="h-[300px] w-full">
-            <BarChart data={cameraData} />
+            <InteractiveChart data={cameraChartData} type="bar" title="Camera Count by Type" />
           </div>
 
           <div className="mt-4 grid grid-cols-3 gap-4">
@@ -156,7 +147,7 @@ export function SimulationResults() {
 
         <TabsContent value="coverage" className="pt-4">
           <div className="h-[300px] w-full">
-            <BarChart data={coverageData} />
+            <InteractiveChart data={coverageComparisonData} type="bar" title="Coverage Comparison (%)" />
           </div>
         </TabsContent>
       </Tabs>
