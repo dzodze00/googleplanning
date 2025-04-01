@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { RecordingSchedule } from "@/components/recording-schedule"
 import { MaintenanceSchedule } from "@/components/maintenance-schedule"
+import { CalendarView } from "@/components/calendar-view"
 
 export default function SchedulePage() {
   return (
@@ -47,9 +48,7 @@ export default function SchedulePage() {
               <CardDescription>View all scheduled activities in a calendar format</CardDescription>
             </CardHeader>
             <CardContent className="h-[500px]">
-              <div className="flex h-full items-center justify-center border rounded-md bg-gray-50">
-                <p className="text-muted-foreground">Calendar view would be displayed here</p>
-              </div>
+              <CalendarView />
             </CardContent>
           </Card>
         </TabsContent>
