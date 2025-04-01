@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { ExportButton } from "@/components/export-button"
 
 export function MaintenanceSchedule() {
   const maintenanceData = [
@@ -67,9 +68,7 @@ export function MaintenanceSchedule() {
             Next Month
           </Button>
         </div>
-        <Button variant="outline" size="sm">
-          Export Schedule
-        </Button>
+        <ExportButton data={maintenanceData} filename="maintenance-schedule.csv" />
       </div>
 
       <Table>
