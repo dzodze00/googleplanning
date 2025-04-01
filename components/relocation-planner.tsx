@@ -11,6 +11,9 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export function RelocationPlanner() {
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [cameraId, setCameraId] = useState("")
+  const [cameraType, setCameraType] = useState("")
+  const [priority, setPriority] = useState("medium")
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,7 +28,7 @@ export function RelocationPlanner() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="camera-id">Camera ID</Label>
-              <Select id="camera-id" defaultValue="">
+              <Select id="camera-id" value={cameraId} onChange={(e) => setCameraId(e.target.value)} required>
                 <option value="" disabled>
                   Select a camera
                 </option>
@@ -38,7 +41,7 @@ export function RelocationPlanner() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="camera-type">Camera Type</Label>
-              <Select id="camera-type" defaultValue="">
+              <Select id="camera-type" value={cameraType} onChange={(e) => setCameraType(e.target.value)} required>
                 <option value="" disabled>
                   Select camera type
                 </option>
@@ -52,22 +55,22 @@ export function RelocationPlanner() {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="current-location">Current Location</Label>
-              <Input id="current-location" placeholder="e.g., Chicago, IL" />
+              <Input id="current-location" placeholder="e.g., Chicago, IL" required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="new-location">New Location</Label>
-              <Input id="new-location" placeholder="e.g., Denver, CO" />
+              <Input id="new-location" placeholder="e.g., Denver, CO" required />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="relocation-date">Relocation Date</Label>
-              <Input id="relocation-date" type="date" />
+              <Input id="relocation-date" type="date" required />
             </div>
             <div className="space-y-2">
               <Label htmlFor="priority">Priority</Label>
-              <Select id="priority" defaultValue="medium">
+              <Select id="priority" value={priority} onChange={(e) => setPriority(e.target.value)}>
                 <option value="low">Low</option>
                 <option value="medium">Medium</option>
                 <option value="high">High</option>
@@ -82,6 +85,7 @@ export function RelocationPlanner() {
               id="reason"
               className="w-full min-h-[100px] rounded-md border border-input bg-background px-3 py-2 text-sm"
               placeholder="Provide details about why this camera needs to be relocated..."
+              required
             ></textarea>
           </div>
 
@@ -109,7 +113,7 @@ export function RelocationPlanner() {
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div className="text-sm font-medium">Camera ID:</div>
-                  <div className="text-sm">CAM-A-567</div>
+                  <div className="text-sm">{cameraId || "CAM-A-567"}</div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div className="text-sm font-medium">From:</div>
@@ -142,3 +146,4 @@ export function RelocationPlanner() {
     </div>
   )
 }
+
