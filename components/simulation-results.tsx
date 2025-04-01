@@ -1,9 +1,11 @@
 "use client"
 import { Card, CardContent } from "@/components/ui/card"
+import type React from "react"
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-// Note: We're creating a mock chart component since recharts isn't available by default
-function BarChart({ children, data }) {
+// Add type annotation to the BarChart component
+function BarChart({ children, data }: { children?: React.ReactNode; data: any[] }) {
   return (
     <div className="flex h-full w-full flex-col">
       <div className="flex-1 rounded-md border bg-gray-50 p-4">
