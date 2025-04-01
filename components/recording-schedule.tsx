@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { ExportButton } from "@/components/export-button"
 
 export function RecordingSchedule() {
   const scheduleData = [
@@ -67,9 +68,7 @@ export function RecordingSchedule() {
             Next Week
           </Button>
         </div>
-        <Button variant="outline" size="sm">
-          Export Schedule
-        </Button>
+        <ExportButton data={scheduleData} filename="recording-schedule.csv" />
       </div>
 
       <Table>
