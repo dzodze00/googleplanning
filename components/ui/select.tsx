@@ -1,27 +1,11 @@
-"use client"
+"\"use client"
 
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 
 import { cn } from "@/lib/utils"
 
-export interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {}
-
-const Select = React.forwardRef<HTMLSelectElement, SelectProps>(({ className, children, ...props }, ref) => {
-  return (
-    <select
-      className={cn(
-        "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className,
-      )}
-      ref={ref}
-      {...props}
-    >
-      {children}
-    </select>
-  )
-})
-Select.displayName = "Select"
+const Select = SelectPrimitive.Root
 
 const SelectGroup = SelectPrimitive.Group
 
@@ -58,12 +42,6 @@ const SelectContent = React.forwardRef<
       {...props}
     >
       <SelectPrimitive.Viewport className="p-1">{children}</SelectPrimitive.Viewport>
-      <SelectPrimitive.ScrollDownButton className="flex items-center justify-center h-6 px-0.5 text-sm text-foreground cursor-default">
-        <SelectScrollDownButton />
-      </SelectPrimitive.ScrollDownButton>
-      <SelectPrimitive.ScrollUpButton className="flex items-center justify-center h-6 px-0.5 text-sm text-foreground cursor-default">
-        <SelectScrollUpButton />
-      </SelectPrimitive.ScrollUpButton>
     </SelectPrimitive.Content>
   </SelectPrimitive.Portal>
 ))
@@ -83,8 +61,10 @@ const SelectItem = React.forwardRef<
     )}
     {...props}
   >
-    <span className="absolute left-2 top-1.5 line-clamp-1">{children}</span>
-    <SelectPrimitive.ItemText />
+    <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+      <SelectPrimitive.ItemIndicator></SelectPrimitive.ItemIndicator>
+    </span>
+    {children}
   </SelectPrimitive.Item>
 ))
 SelectItem.displayName = SelectPrimitive.Item.displayName
@@ -103,7 +83,10 @@ const SelectScrollUpButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollUpButton
     ref={ref}
-    className={cn("flex items-center justify-center h-6 px-0.5 text-sm text-foreground cursor-default", className)}
+    className={cn(
+      "flex items-center justify-center h-6 px-0.5 text-sm text-muted-foreground cursor-default",
+      className,
+    )}
     {...props}
   />
 ))
@@ -115,7 +98,10 @@ const SelectScrollDownButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.ScrollDownButton
     ref={ref}
-    className={cn("flex items-center justify-center h-6 px-0.5 text-sm text-foreground cursor-default", className)}
+    className={cn(
+      "flex items-center justify-center h-6 px-0.5 text-sm text-muted-foreground cursor-default",
+      className,
+    )}
     {...props}
   />
 ))
@@ -133,4 +119,3 @@ export {
   SelectScrollUpButton,
   SelectScrollDownButton,
 }
-
