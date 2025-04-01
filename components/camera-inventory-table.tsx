@@ -5,11 +5,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
+import { Select } from "@/components/ui/select"
 import { Search, Filter } from "lucide-react"
 
 export function CameraInventoryTable() {
   const [searchQuery, setSearchQuery] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
 
   // Mock data for camera inventory
   const cameras = [
@@ -75,6 +76,18 @@ export function CameraInventoryTable() {
     }
   }
 
+  // Filter cameras based on search query and status filter
+  const filteredCameras = cameras.filter((camera) => {
+    const matchesSearch =
+      camera.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      camera.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      camera.type.toLowerCase().includes(searchQuery.toLowerCase())
+
+    const matchesStatus = statusFilter === "all" || camera.status.toLowerCase() === statusFilter.toLowerCase()
+
+    return matchesSearch && matchesStatus
+  })
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-4">
@@ -87,19 +100,16 @@ export function CameraInventoryTable() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
-        <Select>
-          <SelectTrigger className="w-[180px]">
-            <Filter className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Statuses</SelectItem>
-            <SelectItem value="operational">Operational</SelectItem>
-            <SelectItem value="service">In Service</SelectItem>
-            <SelectItem value="transit">In Transit</SelectItem>
-            <SelectItem value="issue">Issues</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-2">
+          <Filter className="h-4 w-4 text-muted-foreground" />
+          <Select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="w-[180px]">
+            <option value="all">All Statuses</option>
+            <option value="operational">Operational</option>
+            <option value="in service">In Service</option>
+            <option value="in transit">In Transit</option>
+            <option value="issue">Issues</option>
+          </Select>
+        </div>
         <Button variant="outline">Export</Button>
       </div>
 
@@ -118,7 +128,7 @@ export function CameraInventoryTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {cameras.map((camera) => (
+            {filteredCameras.map((camera) => (
               <TableRow key={camera.id}>
                 <TableCell className="font-medium">{camera.id}</TableCell>
                 <TableCell>{camera.type}</TableCell>
@@ -149,7 +159,9 @@ export function CameraInventoryTable() {
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="text-sm text-muted-foreground">Showing 5 of 1,248 cameras</div>
+        <div className="text-sm text-muted-foreground">
+          Showing {filteredCameras.length} of {cameras.length} cameras
+        </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" disabled>
             Previous
