@@ -1,5 +1,7 @@
 "use client"
 
+import { InteractiveChart } from "@/components/interactive-chart"
+
 export function UsageAnalytics() {
   const usageData = [
     { month: "Jan", views: 1.2, downloads: 0.8 },
@@ -8,6 +10,26 @@ export function UsageAnalytics() {
     { month: "Apr", views: 1.8, downloads: 1.3 },
     { month: "May", views: 2.1, downloads: 1.5 },
     { month: "Jun", views: 2.3, downloads: 1.7 },
+  ]
+
+  const viewsData = usageData.map((item) => ({
+    label: item.month,
+    value: item.views,
+    color: "#4f46e5",
+  }))
+
+  const downloadsData = usageData.map((item) => ({
+    label: item.month,
+    value: item.downloads,
+    color: "#10b981",
+  }))
+
+  const locationData = [
+    { label: "New York", value: 245 },
+    { label: "Los Angeles", value: 198 },
+    { label: "Chicago", value: 176 },
+    { label: "Houston", value: 142 },
+    { label: "Miami", value: 128 },
   ]
 
   return (
@@ -32,80 +54,29 @@ export function UsageAnalytics() {
 
       <div className="rounded-lg border p-4">
         <h3 className="mb-4 font-medium">Monthly Usage Trends</h3>
-        <div className="h-[300px] w-full">
-          <div className="flex h-full flex-col">
-            <div className="flex-1 rounded-md border bg-gray-50 p-4">
-              <div className="mb-4 grid grid-cols-7 gap-2 border-b pb-2">
-                <div className="text-xs font-medium">Month</div>
-                <div className="text-xs font-medium">Views (M)</div>
-                <div className="text-xs font-medium">Downloads (M)</div>
-              </div>
-              <div className="space-y-2">
-                {usageData.map((item) => (
-                  <div key={item.month} className="grid grid-cols-7 gap-2">
-                    <div className="text-sm">{item.month}</div>
-                    <div className="text-sm">{item.views}</div>
-                    <div className="text-sm">{item.downloads}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="mt-2 text-xs text-center text-muted-foreground">
-              Note: Interactive chart would be displayed here
-            </div>
-          </div>
+        <div className="h-[300px]">
+          <InteractiveChart data={viewsData} type="line" title="Monthly Views (Millions)" />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="rounded-lg border p-4">
           <h3 className="mb-4 font-medium">Top Viewed Locations</h3>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-sm">New York, NY</span>
-              <span className="text-sm font-medium">245K</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Los Angeles, CA</span>
-              <span className="text-sm font-medium">198K</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Chicago, IL</span>
-              <span className="text-sm font-medium">176K</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Houston, TX</span>
-              <span className="text-sm font-medium">142K</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Miami, FL</span>
-              <span className="text-sm font-medium">128K</span>
-            </div>
+          <div className="h-[250px]">
+            <InteractiveChart data={locationData} type="pie" title="Views by Location (Thousands)" />
           </div>
         </div>
         <div className="rounded-lg border p-4">
-          <h3 className="mb-4 font-medium">Top Downloaded Locations</h3>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-sm">New York, NY</span>
-              <span className="text-sm font-medium">187K</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Los Angeles, CA</span>
-              <span className="text-sm font-medium">154K</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Chicago, IL</span>
-              <span className="text-sm font-medium">132K</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">San Francisco, CA</span>
-              <span className="text-sm font-medium">118K</span>
-            </div>
-            <div className="flex items-center justify-between">
-              <span className="text-sm">Boston, MA</span>
-              <span className="text-sm font-medium">96K</span>
-            </div>
+          <h3 className="mb-4 font-medium">Views vs Downloads</h3>
+          <div className="h-[250px]">
+            <InteractiveChart
+              data={[
+                { label: "Views", value: 2.3, color: "#4f46e5" },
+                { label: "Downloads", value: 1.7, color: "#10b981" },
+              ]}
+              type="bar"
+              title="Views vs Downloads (Millions)"
+            />
           </div>
         </div>
       </div>
