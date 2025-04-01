@@ -1,5 +1,7 @@
 "use client"
 
+import { InteractiveChart } from "@/components/interactive-chart"
+
 export function QualityMetrics() {
   const qualityData = [
     { metric: "Image Resolution", score: 92, change: 1.5 },
@@ -17,59 +19,54 @@ export function QualityMetrics() {
     { metric: "Hardware Failures", score: 99.1, change: 0.4 },
   ]
 
+  const qualityChartData = qualityData.map((item) => ({
+    label: item.metric,
+    value: item.score,
+    color: "#4f46e5",
+  }))
+
+  const reliabilityChartData = reliabilityData.map((item) => ({
+    label: item.metric,
+    value: item.score,
+    color: "#10b981",
+  }))
+
+  const trendData = [
+    { label: "May", value: 87.2 },
+    { label: "Jun", value: 87.5 },
+    { label: "Jul", value: 88.1 },
+    { label: "Aug", value: 88.3 },
+    { label: "Sep", value: 88.7 },
+    { label: "Oct", value: 89.0 },
+    { label: "Nov", value: 89.2 },
+    { label: "Dec", value: 89.5 },
+    { label: "Jan", value: 89.7 },
+    { label: "Feb", value: 89.8 },
+    { label: "Mar", value: 90.1 },
+    { label: "Apr", value: 90.4 },
+  ]
+
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-4">
         <div className="rounded-lg border p-4">
           <h3 className="mb-4 font-medium">Image Quality Metrics</h3>
-          <div className="space-y-4">
-            {qualityData.map((item) => (
-              <div key={item.metric}>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">{item.metric}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">{item.score}/100</span>
-                    <span className={`text-xs ${item.change >= 0 ? "text-green-500" : "text-red-500"}`}>
-                      {item.change >= 0 ? "+" : ""}
-                      {item.change}%
-                    </span>
-                  </div>
-                </div>
-                <div className="mt-1 h-2 w-full rounded-full bg-gray-100">
-                  <div className="h-2 rounded-full bg-blue-500" style={{ width: `${item.score}%` }}></div>
-                </div>
-              </div>
-            ))}
+          <div className="h-[250px]">
+            <InteractiveChart data={qualityChartData} type="bar" title="Quality Scores (out of 100)" />
           </div>
         </div>
         <div className="rounded-lg border p-4">
           <h3 className="mb-4 font-medium">Reliability Metrics</h3>
-          <div className="space-y-4">
-            {reliabilityData.map((item) => (
-              <div key={item.metric}>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">{item.metric}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium">{item.score}%</span>
-                    <span className={`text-xs ${item.change >= 0 ? "text-green-500" : "text-red-500"}`}>
-                      {item.change >= 0 ? "+" : ""}
-                      {item.change}%
-                    </span>
-                  </div>
-                </div>
-                <div className="mt-1 h-2 w-full rounded-full bg-gray-100">
-                  <div className="h-2 rounded-full bg-green-500" style={{ width: `${item.score}%` }}></div>
-                </div>
-              </div>
-            ))}
+          <div className="h-[250px]">
+            <InteractiveChart data={reliabilityChartData} type="bar" title="Reliability Scores (%)" />
           </div>
         </div>
       </div>
 
       <div className="rounded-lg border p-4">
         <h3 className="mb-4 font-medium">Quality Trends (Last 12 Months)</h3>
-        <div className="h-[250px] flex items-center justify-center bg-gray-50 rounded-md">
-          <p className="text-muted-foreground">Interactive quality trend chart would be displayed here</p>
+        <div className="h-[250px]">
+          <InteractiveChart data={trendData} type="line" title="Overall Quality Score Trend" />
         </div>
       </div>
 
