@@ -107,7 +107,7 @@ export function SimulationForm() {
 
       <div className="space-y-2 pt-2">
         <Label htmlFor="update-frequency">Update Frequency</Label>
-        <Select value={updateFrequency} onChange={(e) => setUpdateFrequency(e.target.value)}>
+        <Select id="update-frequency" value={updateFrequency} onChange={(e) => setUpdateFrequency(e.target.value)}>
           <option value="standard">Standard (As specified)</option>
           <option value="accelerated">Accelerated (50% faster)</option>
           <option value="reduced">Reduced (50% slower)</option>
@@ -130,3 +130,4 @@ export function SimulationForm() {
     </div>
   )
 }
+
