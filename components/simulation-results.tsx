@@ -4,8 +4,27 @@ import type React from "react"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-// Add type annotation to the BarChart component
-function BarChart({ children, data }: { children?: React.ReactNode; data: any[] }) {
+// Define types for our data
+type CameraData = {
+  name: string
+  count: number
+  cost: number
+}
+
+type CoverageData = {
+  name: string
+  current: number
+  simulated: number
+}
+
+// Add proper type annotation to the BarChart component
+function BarChart<T extends Record<string, string | number>>({
+  children,
+  data,
+}: {
+  children?: React.ReactNode
+  data: T[]
+}) {
   return (
     <div className="flex h-full w-full flex-col">
       <div className="flex-1 rounded-md border bg-gray-50 p-4">
@@ -20,9 +39,9 @@ function BarChart({ children, data }: { children?: React.ReactNode; data: any[] 
         <div className="space-y-2">
           {data.map((item, index) => (
             <div key={index} className="grid grid-cols-4 gap-2">
-              {Object.values(item).map((value, i) => (
+              {Object.entries(item).map(([key, value], i) => (
                 <div key={i} className="text-sm">
-                  {value}
+                  {String(value)}
                 </div>
               ))}
             </div>
@@ -35,14 +54,14 @@ function BarChart({ children, data }: { children?: React.ReactNode; data: any[] 
 }
 
 export function SimulationResults() {
-  // Mock data for simulation results
-  const cameraData = [
+  // Mock data for simulation results with proper typing
+  const cameraData: CameraData[] = [
     { name: "Type A", count: 850, cost: 8500000 },
     { name: "Type B", count: 320, cost: 4800000 },
     { name: "Type C", count: 78, cost: 1560000 },
   ]
 
-  const coverageData = [
+  const coverageData: CoverageData[] = [
     { name: "Urban", current: 95, simulated: 100 },
     { name: "Suburban", current: 85, simulated: 100 },
     { name: "Rural", current: 40, simulated: 50 },
